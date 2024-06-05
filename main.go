@@ -28,16 +28,17 @@ func main() {
 
 	// wait for client requests and respond
 	for {
-        resp := NewResp(conn)
-        value, err := resp.Read()
-        if err != nil {
-            fmt.Println(err)
-            return
-        }
+		resp := NewResp(conn)
+		value, err := resp.Read()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 
-        fmt.Println(value)
+		fmt.Println(value)
 
 		// for now, ignore request and send back PONG
-		conn.Write([]byte("+OK\r\n"))
+		writer := NewWriter(conn)
+		writer.Write(Value{typ: "string", str: "OK"})
 	}
 }
