@@ -14,10 +14,9 @@ var Handlers = map[string]func([]Value) Value{
 	"HGETALL": hgetall,
 }
 
-// Datastores and mutexs
+// Datastores and mutexes
 var (
 	SETs = map[string]string{}
-	// Mutex used to control concurrent SET requests
 	SETsMU = sync.RWMutex{}
 
 	HSETs   = map[string]map[string]string{}
