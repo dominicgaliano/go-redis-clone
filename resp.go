@@ -105,7 +105,7 @@ func (r *Resp) readArray() (Value, error) {
 	}
 
 	// recursively parse and read each value in array
-	v.array = make([]Value, length)
+	v.array = make([]Value, 0)
 	for i := 0; i < length; i++ {
 		val, err := r.Read()
 		if err != nil {
@@ -188,6 +188,7 @@ func (v Value) marshalBulk() []byte {
 
 func (v Value) marshalArray() []byte {
 	var bytes []byte
+    fmt.Printf("%+v\n", v)
 
 	bytes = append(bytes, ARRAY)                         // '*'
 	bytes = append(bytes, strconv.Itoa(len(v.array))...) // array length ex. 3
@@ -195,7 +196,11 @@ func (v Value) marshalArray() []byte {
 	for _, value := range v.array {
 		bytes = append(bytes, value.Marshal()...)
 	}
-	bytes = append(bytes, '\r', '\n')
+
+    // only add trailing \r\n if array not empty
+    if len(v.array) != 0 {
+        bytes = append(bytes, '\r', '\n') 
+    }
 
 	return bytes
 }
