@@ -187,20 +187,21 @@ func (v Value) marshalBulk() []byte {
 }
 
 func (v Value) marshalArray() []byte {
+    len := len(v.array)
 	var bytes []byte
-    fmt.Printf("%+v\n", v)
 
 	bytes = append(bytes, ARRAY)                         // '*'
-	bytes = append(bytes, strconv.Itoa(len(v.array))...) // array length ex. 3
+	bytes = append(bytes, strconv.Itoa(len)...) // array length ex. 3
 	bytes = append(bytes, '\r', '\n')
-	for _, value := range v.array {
-		bytes = append(bytes, value.Marshal()...)
-	}
 
-    // only add trailing \r\n if array not empty
-    if len(v.array) != 0 {
-        bytes = append(bytes, '\r', '\n') 
+    for i := 0; i < len; i++ {
+		bytes = append(bytes, v.array[i].Marshal()...)
     }
+
+    // // only add trailing \r\n if array not empty
+    // if len != 0 {
+    //     bytes = append(bytes, '\r', '\n') 
+    // }
 
 	return bytes
 }
